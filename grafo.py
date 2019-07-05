@@ -39,10 +39,10 @@ class Grafo:
     def adyacentes(self, v):
         '''Devuelve una lista con los adyacentes'''
         return self._vertices[v].keys()
-    def estanConectados(self, a, b):
-        '''Devuelve true si estan conectados, sino false'''
-        if not a in self._vertices.keys() or not b in self._vertices.keys():return False
-        return a in self._vertices[b].keys() and b in self._vertices[a].keys()
+    # def estanConectados(self, a, b):
+    #     '''Devuelve true si estan conectados, sino false'''
+    #     if not a in self._vertices.keys() or not b in self._vertices.keys():return False
+    #     return a in self._vertices[b].keys() and b in self._vertices[a].keys()
     def __str__(self):
         cadena = ""
         for v in self._vertices.keys():
@@ -52,20 +52,4 @@ class Grafo:
             cadena += "\n"
         return cadena
 
-g = Grafo()
-print(g)
-print('Esta vacio?', g.estaVacio())
-print('Agrego A',g.verticeAgregar('A'))
-print('Agrego B',g.verticeAgregar('B'))
-print('Agrego C',g.verticeAgregar('C'))
-print('Esta vacio?', g.estaVacio())
-print('Cantidad?', g.verticeCantidad())
-print('Agrego AC',g.aristaAgregar('A','C'))
-print('Agrego CB',g.aristaAgregar('C','B'))
-print('Agrego AB',g.aristaAgregar('A','B'))
-print(g)
 
-#g.verticeRemover('A')
-#g.verticeRemover('B')
-print(g.vertices())
-#print(g.)
