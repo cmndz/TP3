@@ -1,5 +1,8 @@
 from grafo import * 
 
+#-------------------------------------------------------------------#
+#                           AUXILIARES                              #
+#-------------------------------------------------------------------#
 def caminoMinimo(grafo, origen):
     visitados = {}
     distancia = {}
@@ -23,6 +26,23 @@ def caminoMinimo(grafo, origen):
                 q.append(w)
     return distancia, padre
 
+def calcularCentralidad( grafo ):
+    centralidad = {}
+    for v in grafo.vertices(): centralidad[v] = 0
+    for v in grafo.vertices():
+        distancia, padre = caminoMinimo(grafo,v)
+        
+        
+        aux = {}
+        for w in grafo.vertices():aux[w] = 0
+        
+
+    return centralidad
+
+
+#-------------------------------------------------------------------#
+#                         FUNCIONALIDADES                           #
+#-------------------------------------------------------------------#
 def min_seguimientos(grafo, origen, destino):
     '''Imprime el Camino Minimo entre un Vertice de Origen y uno de Destino, si es que fueran conexos.'''
     if not origen in grafo.vertices() or destino not in grafo.vertices():
@@ -48,7 +68,8 @@ def min_seguimientos(grafo, origen, destino):
 
 def mas_imp(grafo, cant):
     '''Imprime los Vertices de mayor a menor centralidad dentro del grafo'''
-    
+    #centralidad = calcularCentralidad( grafo ):
+
 
 
 
@@ -81,7 +102,7 @@ print("Remuevo DF",g.aristaRemover('B','F'))
 print(g)
 min_seguimientos(g, 'A', 'F')
 print("Remuevo B", g.verticeRemover('B'))
-
+min_seguimientos(g, 'A', 'F')
 #g.verticeRemover('A')
 #g.verticeRemover('B')
 #print(g.vertices())
