@@ -10,10 +10,7 @@ def caminoMinimo(grafo, origen):
     distancia = {}
     queue = deque()
     #-----
-    for v in grafo.vertices():
-        distancia[v] = None
-        padre[v] = None
-    #-----
+    padre[origen] = None
     distancia[origen] = 0
     queue.append(origen)
     #-----
@@ -27,22 +24,27 @@ def caminoMinimo(grafo, origen):
                 queue.append(w)
     return distancia, padre
 
-#def ordenar_vertices(grafo, distancias):
+#def randomWalks(grafo, origen, pasos):
 
 
+'''
 def calcularCentralidad( grafo ):
     centralidad = {}
     for v in grafo.vertices(): centralidad[v] = 0
     for v in grafo.vertices():
+        
         #distancia, padre = caminoMinimo(grafo,v)
         aux = {}
         for w in grafo.vertices():aux[w] = 0
         #vertices_ordenados = ordenar_vertices(grafo, distancias)
+
+
+
         
         
 
     return centralidad
-
+'''
 
 #-------------------------------------------------------------------#
 #                         FUNCIONALIDADES                           #
@@ -53,7 +55,7 @@ def min_seguimientos(grafo, origen, destino):
         print("Seguimiento Imposible")                                      #vertices se encuetren en el Grafo.
         return
     _, padre = caminoMinimo(grafo, origen)
-    if not padre[destino]:                                                  #Nos aseguramos de que ambos 
+    if destino not in padre.keys():                                                  #Nos aseguramos de que ambos 
         print("Seguimiento Imposible")                                      #vertices esten en la misma 
         return                                                              #componente conexa.
     stack = []
@@ -79,6 +81,9 @@ def mas_imp(grafo, cant):
 
 
 
+
+
+#def persecucion():
 
 g = Grafo()
 print(g)
