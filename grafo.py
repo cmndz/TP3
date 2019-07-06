@@ -6,23 +6,29 @@ class Grafo:
 	def __init__(self):
 		"""Crea una grafo vacío."""
 		self.grafo = {}
+		self.cantidad = 0
 
+	def cantidad_vertices(self):
+		"""Devuelve la cantidad de vertices en ell grafo."""
+		return self.cantidad
 
 	def agregar_vertice(self, vertice):
 		"""Agrega un vertice al grafo."""
 		self.grafo[vertice] = {}
+		self.cantidad += 1
 
 
 	def borrar_vertice(self, vertice):
 		"""Borra un vertice del grafo."""
-		for clave in self.grafo:
-
-			if vertice in self.grafo[clave]:
-				self.grafo[clave].pop(vertice)				
-
 		if vertice not in self.grafo:
 			return None
 
+		for clave in self.grafo:
+
+			if vertice in self.grafo[clave]:
+				self.grafo[clave].pop(vertice)
+
+		self.cantidad -= 1
 		return self.grafo.pop(vertice)
 
 
