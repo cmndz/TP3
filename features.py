@@ -1,3 +1,4 @@
+import random
 from grafo import * 
 from collections import deque
 
@@ -24,27 +25,31 @@ def caminoMinimo(grafo, origen):
                 queue.append(w)
     return distancia, padre
 
-#def randomWalks(grafo, origen, pasos):
-
-
-'''
-def calcularCentralidad( grafo ):
-    centralidad = {}
-    for v in grafo.vertices(): centralidad[v] = 0
-    for v in grafo.vertices():
+def random_walks(grafo, largo, cant_recorridos):
+    vertices_apariciones = {}
+    
+    for v in grafo: 
+        vertices_apariciones[v] = 0
+    
+    for _ in range (0, cant_recorridos):	#Para una cantidad de recorridos
         
-        #distancia, padre = caminoMinimo(grafo,v)
-        aux = {}
-        for w in grafo.vertices():aux[w] = 0
-        #vertices_ordenados = ordenar_vertices(grafo, distancias)
+        vertice_origen = grafo.vertice_random()
+        vertices_apariciones[vertice_origen] += 1
 
+        iteraciones_extra = 0
 
+        for i in range (0, largo + iteraciones_extra):	#Para una cantidad "largo" de veces
+            
+            if not grafo.adyacentes(vertice_origen):
+                iteraciones_extra = largo - i
+                continue
+            vertice_random = random.choice(list(grafo.adyacentes(vertice_origen)))	#Del vertice anterior se elije uno de sus adyacentes al azar
+            vertices_apariciones[vertice_random] += 1
 
-        
-        
+            if i == (largo + iteraciones_extra - 1):
+                iteraciones_extra = 0
 
-    return centralidad
-'''
+    return vertices_apariciones
 
 #-------------------------------------------------------------------#
 #                         FUNCIONALIDADES                           #
@@ -55,7 +60,7 @@ def min_seguimientos(grafo, origen, destino):
         print("Seguimiento Imposible")                                      #vertices se encuetren en el Grafo.
         return
     _, padre = caminoMinimo(grafo, origen)
-    if destino not in padre.keys():                                                  #Nos aseguramos de que ambos 
+    if destino not in padre.keys():                                         #Nos aseguramos de que ambos 
         print("Seguimiento Imposible")                                      #vertices esten en la misma 
         return                                                              #componente conexa.
     stack = []
@@ -74,16 +79,48 @@ def min_seguimientos(grafo, origen, destino):
 
 def mas_imp(grafo, cant):
     '''Imprime los Vertices de mayor a menor centralidad dentro del grafo'''
-    #centralidad = calcularCentralidad( grafo ):
+    cant_recorridos = grafo.cantidad_vertices()*10
+    largo = grafo.cantidad_vertices()*10
+
+    vertices_apariciones = random_walks(grafo, largo, cant_recorridos)
+
+    for _ in range(cant):
+        valor = 0
+        clave = None
+        for v in vertices_apariciones.keys():
+            if vertices_apariciones[v] > valor:
+                valor = vertices_apariciones[v]
+                clave = v
+        vertices_apariciones.pop(clave)  
+        print(clave)
+    return
+
+def persecucion(grafo, delincuenteN, k):
+    cant_recorridos = grafo.cantidad_vertices()*10
+    largo = grafo.cantidad_vertices()*10
+
+    vertices_apariciones = random_walks(grafo, largo, cant_recorridos)
+
+    vertices_importantes = []
+    for _ in range(k):
+        valor = 0
+        clave = None
+        for v in vertices_apariciones.keys():
+            if vertices_apariciones[v] > valor:
+                valor = vertices_apariciones[v]
+                clave = v
+        vertices_apariciones.pop(clave)
+        vertices_importantes.append(clave)
+    
+    
+
+    
+    
 
 
 
 
 
-
-
-
-#def persecucion():
 
 g = Grafo()
 print(g)
@@ -104,6 +141,12 @@ print("Agrego DF",g.agregar_arista('D','F'))
 print("Agrego DF",g.agregar_arista('D','F'))
 print("Agrego DF",g.agregar_arista('D','F'))
 print(g)
+
+mas_imp(g, 2)
+
+
+#print(g.vertice_random())
+'''
 #print('Adyacentes de A',g.adyacentes('A'))
 min_seguimientos(g, 'A', 'F')
 print("Remuevo DF",g.borrar_arista('B','F'))
@@ -114,4 +157,4 @@ min_seguimientos(g, 'A', 'F')
 #g.verticeRemover('A')
 #g.verticeRemover('B')
 #print(g.vertices())
-#print(g.)
+#print(g.)'''
