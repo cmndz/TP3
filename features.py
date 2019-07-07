@@ -100,8 +100,8 @@ def persecucion(grafo, delincuenteN, k):
     largo = grafo.cantidad_vertices()*10
 
     vertices_apariciones = random_walks(grafo, largo, cant_recorridos)
-
     vertices_importantes = []
+    
     for _ in range(k):
         valor = 0
         clave = None
@@ -111,16 +111,46 @@ def persecucion(grafo, delincuenteN, k):
                 clave = v
         vertices_apariciones.pop(clave)
         vertices_importantes.append(clave)
-    
-    
+        
+    distancia_aux = 0
+    vertice_aux = None
+    padre_aux = None
+    distancia_aux = None
+    for d in delincuenteN:
+        distancia, padre = caminoMinimo(grafo, d)
+        for c in vertices_importantes:
+            if distancia[c] > distancia_aux: continue
+            if distancia[c] == distancia_aux and vertices_importantes.index(c)> vertices_importantes.index(vertice_aux): continue
+            distancia_aux = 0
+            vertice_aux = c
+            padre_aux = padre
+            distancia_aux = distancia
+
+    stack = []
+    v = vertice_aux
+    while v:                                                                #Apilamos los vertices,
+        stack.append(v)                                                     #desde el Destino, 
+        v = padre_aux[v]                                                        #hacia el Origen.
+
+    while stack:                                                            #Desapilamos, mientras
+        print( stack.pop() , end = "" )                                     #imprimimos el seguimiento.
+        if stack:
+            print(" -> ", end = "")
+            continue
+        print()
+
+
+
+
+    return
+
+
+
+
+
 
     
     
-
-
-
-
-
 
 g = Grafo()
 print(g)
