@@ -197,8 +197,8 @@ def mas_imp(grafo, cant):
 
 def persecucion(grafo, verticesDeOrigen, k):
     '''Imprime el Camino Minimo entre un Vertices de Origen y uno de los Vertices con mayor Centralidad'''
-    cant_recorridos = grafo.cantidad_vertices()#*factorDelRecorrido
-    largo = grafo.cantidad_vertices()#*factorDelRecorrido
+    cant_recorridos = grafo.cantidad_vertices()
+    largo = grafo.cantidad_vertices()
     vertices_apariciones = random_walks(grafo, largo, cant_recorridos)
     verticesOrdPorCentralidad = countingSort(vertices_apariciones, False)
             
@@ -208,7 +208,8 @@ def persecucion(grafo, verticesDeOrigen, k):
 
     for origen in verticesDeOrigen:
         distancias, padres = caminoMinimo(grafo, origen)
-        for destino in verticesOrdPorCentralidad:
+        for i in range(k):
+            destino = verticesOrdPorCentralidad[i]
             if origen == destino: continue
             if not destinoFinal == None:
                 if distancias[destino] > distancia_aux or (distancias[destino] == distancia_aux and 
@@ -258,29 +259,27 @@ def divulgar(grafo, origen, n):
 g = Grafo()
 print(g)
 
-print("Agrego A",g.agregar_vertice('A'))
-print("Agrego B",g.agregar_vertice('B'))
-print("Agrego C",g.agregar_vertice('C'))
-print("Agrego D",g.agregar_vertice('D'))
-print("Agrego E",g.agregar_vertice('E'))
-print("Agrego F",g.agregar_vertice('F'))
-
-print("Agrego AB",g.agregar_arista('A','B'))
-print("Agrego BC",g.agregar_arista('B','C'))
-print("Agrego CD",g.agregar_arista('C','D'))
-print("Agrego AE",g.agregar_arista('A','E'))
-print("Agrego BF",g.agregar_arista('B','F'))
-print("Agrego DF",g.agregar_arista('D','F'))
-print("Agrego DF",g.agregar_arista('D','F'))
-print("Agrego DF",g.agregar_arista('D','F'))
+g.agregar_vertice('A')
+g.agregar_vertice('B')
+g.agregar_vertice('C')
+g.agregar_vertice('D')
+g.agregar_vertice('E')
+g.agregar_vertice('F')
+g.agregar_arista('A','B')
+g.agregar_arista('B','C')
+g.agregar_arista('C','D')
+g.agregar_arista('A','E')
+g.agregar_arista('B','F')
+g.agregar_arista('D','F')
+g.agregar_arista('D','F')
+g.agregar_arista('D','F')
 print(g)
 
 mas_imp(g, 2)
-
-
 divulgar(g, 'A', 1)
-
 divulgar(g, 'A', 2)
+lista = ['A','B']
+persecucion(g,lista,1)
 
 
 #print(g.vertice_random())
