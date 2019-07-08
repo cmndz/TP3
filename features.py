@@ -45,8 +45,8 @@ def random_walks(grafo, largo, cant_recorridos):
             if not grafo.adyacentes(vertice_origen):
                 iteraciones_extra = largo - i
                 continue
-            vertice_random = random.choice(list(grafo.adyacentes(vertice_origen)))	#Del vertice anterior se elije uno de sus adyacentes al azar
-            vertices_apariciones[vertice_random] += 1
+            vertice_origen = random.choice(list(grafo.adyacentes(vertice_origen)))	#Del vertice anterior se elije uno de sus adyacentes al azar
+            vertices_apariciones[vertice_origen] += 1
 
             if i == (largo + iteraciones_extra - 1):
                 iteraciones_extra = 0
@@ -133,8 +133,8 @@ def min_seguimientos(grafo, origen, destino):
 
 def mas_imp(grafo, cant):
     '''Imprime los Vertices de mayor a menor centralidad dentro del grafo'''
-    cant_recorridos = grafo.cantidad_vertices()*factorDelRecorrido
-    largo = grafo.cantidad_vertices()*factorDelRecorrido
+    cant_recorridos = grafo.cantidad_vertices()#*factorDelRecorrido
+    largo = grafo.cantidad_vertices()#*factorDelRecorrido
 
     vertices_apariciones = random_walks(grafo, largo, cant_recorridos)
     
@@ -151,8 +151,8 @@ def mas_imp(grafo, cant):
 
 def persecucion(grafo, verticesDeOrigen, k):
     '''Imprime el Camino Minimo entre un Vertices de Origen y uno de los Vertices con mayor Centralidad'''
-    cant_recorridos = grafo.cantidad_vertices()*factorDelRecorrido
-    largo = grafo.cantidad_vertices()*factorDelRecorrido
+    cant_recorridos = grafo.cantidad_vertices()#*factorDelRecorrido
+    largo = grafo.cantidad_vertices()#*factorDelRecorrido
     vertices_apariciones = random_walks(grafo, largo, cant_recorridos)
     verticesOrdPorCentralidad = countingSort(vertices_apariciones, False)
             
