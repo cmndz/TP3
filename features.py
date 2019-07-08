@@ -12,11 +12,11 @@ def caminoMinimo(grafo, origen):
     padre = {}
     distancia = {}
     queue = deque()
-    #-----
+    #---------------------------------------------------------------
     padre[origen] = None
     distancia[origen] = 0
     queue.append(origen)
-    #-----
+    #---------------------------------------------------------------
     while queue:
         v = queue.popleft()
         visitados.add(v)
@@ -57,17 +57,14 @@ def countingSort(hash, MenorAMayor = True):
     minimo = min(list(hash.values()))
     maximo = max(list(hash.values()))
     rango = (maximo - minimo)+1
-
     #Calculo de Ocurrencias-----------------------------------------
     ocurrencias = []
     for i in range(rango):ocurrencias.insert(i,0)
     for i in hash.values(): ocurrencias[i-minimo] += 1
-
     #Sumas Parciales------------------------------------------------
     sumasParciales = []
     for i in range(rango+1):sumasParciales.insert(i,0)
     for i in range(rango): sumasParciales[i+1] = sumasParciales[i]+ocurrencias[i]
-  
     #Solucion-------------------------------------------------------
     solucion = []
     for i in range(len(hash)):solucion.insert(i,None)
@@ -76,7 +73,7 @@ def countingSort(hash, MenorAMayor = True):
         if MenorAMayor: 
             posicion = sumasParciales[hash[v]-minimo]
         else:
-            posicion = len(solucion)-1-sumasParciales[hash[v]-minimo]
+            posicion = len(solucion)-sumasParciales[hash[v]-minimo]-1
         solucion[posicion] = v
         sumasParciales[hash[v]-minimo]+=1
     return solucion
@@ -84,17 +81,17 @@ def countingSort(hash, MenorAMayor = True):
 def imprimirSeguimiento(padres, destino):
     stack = []
     vertice = destino
+    #---------------------------------------------------------------
     while vertice:
         stack.append(vertice) 
         vertice = padres[vertice]
-    
+    #---------------------------------------------------------------
     while stack:
         print( stack.pop() , end = "" )
         if stack:
             print(" -> ", end = "")
             continue
         print()
-    
     return
 
 def primer_visita(grafo, labels, ady_para_cada_vertice):
