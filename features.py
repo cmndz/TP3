@@ -94,26 +94,65 @@ def imprimirSeguimiento(padres, destino):
         print()
     return
 
-def primer_visita(grafo, labels, ady_para_cada_vertice):
+def asignar_labels(grafo, labels, ady_para_cada_vertice):
 
-    for v in grafo:
-        labels[v] = random.randint(1, 1000)
+	for v in grafo:
+		labels[v] = random.randint(1, 1000)
 
-        for w in grafo.adyacentes(v):
+		for w in grafo.adyacentes(v):
 
-            if w == v:
-                continue
-            
-            set_actual_de_adyacentes = ady_para_cada_vertice.get(w, set())
-            ady_para_cada_vertice[w] = set_actual_de_adyacentes.add(v)
+			if w == v:
+				continue
 
-    return labels, ady_para_cada_vertice
+			set_actual_de_adys = ady_para_cada_vertice.get(w, set())
+			ady_para_cada_vertice[w] = set_actual_de_adys.add(v)
 
-def max_freq(grafo, adyacentes, labels):
-    
-    
-    
-    return 0
+	return labels, ady_para_cada_vertice
+
+
+def max_freq(vertice, adyacentes, labels):
+
+	if not adyacentes:
+		return labels[vertice]
+
+	frecuencias = {}
+	max_act = 0
+
+	for v in adyacentes:
+
+		numero_id = labels[v]
+		contador = frecuencias.get(numero_id, 0) + 1
+		frecuencias[numero_id] = contador
+
+		if frecuencias[numero_id] > max_act:
+			max_act = frecuencias[numero_id]
+			label_actual = numero_id
+
+	return label_actual
+
+
+def impresion_de_comunidades(dict_comunidades, n):
+
+	comunidad_impresa = 1
+
+	for comunidad in dict_comunidades:
+
+		cant_integrantes = len(dict_comunidades[comunidad])
+
+		if cant_integrantes >= n:
+
+			print("Comunidad {}: ".format(comunidad_impresa))
+			comunidad_impresa += 1
+
+			integrante_impreso = 1
+
+			for integrante in dict_comunidades[comunidad]:
+				print(integrante)
+
+				if integrante_impreso != cant_integrantes:
+					print(", ")
+
+				integrante_impreso += 1
 
 #-------------------------------------------------------------------#
 #                         FUNCIONALIDADES                           #
@@ -176,17 +215,26 @@ def persecucion(grafo, verticesDeOrigen, k):
     return
 
 def comunidades(grafo, n):
-    '''Imprime un listado de Comunidades de al menos n integrantes'''
-    labels = {}
-    ady_para_cada_vertice = {}
 
-    labels, ady_para_cada_vertice = primer_visita(grafo, labels, ady_para_cada_vertice)
+	labels = {}
+	ady_para_cada_vertice = {}
+	dict_comunidades = {}
 
-    for _ in range(0, 50):
+	labels, ady_para_cada_vertice = asignar_labels(grafo, labels, ady_para_cada_vertice)
 
-        for v in grafo:
-            
-            labels[v] = max_freq(grafo, ady_para_cada_vertice[v], labels)
+	iteraciones = 50	#numero al azar para testear con los tiempos este se puede cambiar para bajar los tiempos
+
+	for i in range(0 , iteraciones):
+
+		for v in grafo:
+		
+			labels[v] = max_freq(v, ady_para_cada_vertice[v], labels)
+
+			if (i == iteraciones - 1):
+				integrantes = dict_comunidades.get(labels[v], set())
+				dict_comunidades[labels[v]] = integrantes.add(v)
+
+	impresion_de_comunidades(dict_comunidades, n)
 
 
 
