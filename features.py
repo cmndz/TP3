@@ -2,8 +2,6 @@ import random
 from grafo import * 
 from collections import deque
 
-factorDelRecorrido = 10
-
 #-------------------------------------------------------------------#
 #                           AUXILIARES                              #
 #-------------------------------------------------------------------#
@@ -98,7 +96,7 @@ def imprimirSeguimiento(padres, destino):
 
 def imprimirListado(lista, limite = None):
     if not limite: limite = len(lista)
-    
+    #---------------------------------------------------------------
     for i in range(0, limite):
         print(lista[i], end = "")
         if i+1 < limite: 
@@ -185,8 +183,8 @@ def min_seguimientos(grafo, origen, destino):
 
 def mas_imp(grafo, cant):
     '''Imprime los Vertices de mayor a menor centralidad dentro del grafo'''
-    cant_recorridos = grafo.cantidad_vertices()#*factorDelRecorrido
-    largo = grafo.cantidad_vertices()#*factorDelRecorrido
+    cant_recorridos = grafo.cantidad_vertices()
+    largo = grafo.cantidad_vertices()
 
     vertices_apariciones = random_walks(grafo, largo, cant_recorridos)
     
@@ -196,7 +194,7 @@ def mas_imp(grafo, cant):
     return 
 
 def persecucion(grafo, verticesDeOrigen, k):
-    '''Imprime el Camino Minimo entre un Vertices de Origen y uno de los Vertices con mayor Centralidad'''
+    '''Imprime el Camino Minimo entre un Vertices de Origen y uno de los k Vertices con mayor Centralidad'''
     cant_recorridos = grafo.cantidad_vertices()
     largo = grafo.cantidad_vertices()
     vertices_apariciones = random_walks(grafo, largo, cant_recorridos)
