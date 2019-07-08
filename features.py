@@ -2,6 +2,8 @@ import random
 from grafo import * 
 from collections import deque
 
+factorDelRecorrido = 10
+
 #-------------------------------------------------------------------#
 #                           AUXILIARES                              #
 #-------------------------------------------------------------------#
@@ -51,106 +53,147 @@ def random_walks(grafo, largo, cant_recorridos):
 
     return vertices_apariciones
 
+def countingSort(hash, MenorAMayor = True):
+    minimo = min(list(hash.values()))
+    maximo = max(list(hash.values()))
+    rango = (maximo - minimo)+1
+
+    #Calculo de Ocurrencias-----------------------------------------
+    ocurrencias = []
+    for i in range(rango):ocurrencias.insert(i,0)
+    for i in hash.values(): ocurrencias[i-minimo] += 1
+
+    #Sumas Parciales------------------------------------------------
+    sumasParciales = []
+    for i in range(rango+1):sumasParciales.insert(i,0)
+    for i in range(rango): sumasParciales[i+1] = sumasParciales[i]+ocurrencias[i]
+  
+    #Solucion-------------------------------------------------------
+    solucion = []
+    for i in range(len(hash)):solucion.insert(i,None)
+    for v in hash.keys():
+        posicion = None
+        if MenorAMayor: 
+            posicion = sumasParciales[hash[v]-minimo]
+        else:
+            posicion = len(solucion)-1-sumasParciales[hash[v]-minimo]
+        solucion[posicion] = v
+        sumasParciales[hash[v]-minimo]+=1
+    return solucion
+
+def imprimirSeguimiento(padres, destino):
+    stack = []
+    vertice = destino
+    while vertice:
+        stack.append(vertice) 
+        vertice = padres[vertice]
+    
+    while stack:
+        print( stack.pop() , end = "" )
+        if stack:
+            print(" -> ", end = "")
+            continue
+        print()
+    
+    return
+
+def primer_visita(grafo, labels, ady_para_cada_vertice):
+
+    for v in grafo:
+        labels[v] = random.randint(1, 1000)
+
+        for w in grafo.adyacentes(v):
+
+            if w == v:
+                continue
+            
+            set_actual_de_adyacentes = ady_para_cada_vertice.get(w, set())
+            ady_para_cada_vertice[w] = set_actual_de_adyacentes.add(v)
+
+    return labels, ady_para_cada_vertice
+
+def max_freq(grafo, adyacentes, labels):
+    
+    
+    
+    return 0
+
 #-------------------------------------------------------------------#
 #                         FUNCIONALIDADES                           #
 #-------------------------------------------------------------------#
 def min_seguimientos(grafo, origen, destino):
     '''Imprime el Camino Minimo entre un Vertice de Origen y uno de Destino, si es que fueran conexos.'''
-    if not origen in grafo.vertices() or destino not in grafo.vertices():   #Nos aseguramos que ambos 
-        print("Seguimiento Imposible")                                      #vertices se encuetren en el Grafo.
+    if not origen in grafo.vertices() or destino not in grafo.vertices():
+        print("Seguimiento Imposible")
         return
-    _, padre = caminoMinimo(grafo, origen)
-    if destino not in padre.keys():                                         #Nos aseguramos de que ambos 
-        print("Seguimiento Imposible")                                      #vertices esten en la misma 
-        return                                                              #componente conexa.
-    stack = []
-    v = destino
-    while v:                                                                #Apilamos los vertices,
-        stack.append(v)                                                     #desde el Destino, 
-        v = padre[v]                                                        #hacia el Origen.
+    _, padres = caminoMinimo(grafo, origen)
+    if destino not in padres.keys():
+        print("Seguimiento Imposible")
+        return
 
-    while stack:                                                            #Desapilamos, mientras
-        print( stack.pop() , end = "" )                                     #imprimimos el seguimiento.
-        if stack:
-            print(" -> ", end = "")
-            continue
-        print()
+    imprimirSeguimiento(padres, destino)
     return
 
 def mas_imp(grafo, cant):
     '''Imprime los Vertices de mayor a menor centralidad dentro del grafo'''
-    cant_recorridos = grafo.cantidad_vertices()*10
-    largo = grafo.cantidad_vertices()*10
+    cant_recorridos = grafo.cantidad_vertices()*factorDelRecorrido
+    largo = grafo.cantidad_vertices()*factorDelRecorrido
 
     vertices_apariciones = random_walks(grafo, largo, cant_recorridos)
-
-    for _ in range(cant):
-        valor = 0
-        clave = None
-        for v in vertices_apariciones.keys():
-            if vertices_apariciones[v] > valor:
-                valor = vertices_apariciones[v]
-                clave = v
-        vertices_apariciones.pop(clave)  
-        print(clave)
-    return
-
-def persecucion(grafo, delincuenteN, k):
-    cant_recorridos = grafo.cantidad_vertices()*10
-    largo = grafo.cantidad_vertices()*10
-
-    vertices_apariciones = random_walks(grafo, largo, cant_recorridos)
-    vertices_importantes = []
     
-    for _ in range(k):
-        valor = 0
-        clave = None
-        for v in vertices_apariciones.keys():
-            if vertices_apariciones[v] > valor:
-                valor = vertices_apariciones[v]
-                clave = v
-        vertices_apariciones.pop(clave)
-        vertices_importantes.append(clave)
-        
-    distancia_aux = 0
-    vertice_aux = None
-    padre_aux = None
-    distancia_aux = None
-    for d in delincuenteN:
-        distancia, padre = caminoMinimo(grafo, d)
-        for c in vertices_importantes:
-            if distancia[c] > distancia_aux: continue
-            if distancia[c] == distancia_aux and vertices_importantes.index(c)> vertices_importantes.index(vertice_aux): continue
-            distancia_aux = 0
-            vertice_aux = c
-            padre_aux = padre
-            distancia_aux = distancia
-
-    stack = []
-    v = vertice_aux
-    while v:                                                                #Apilamos los vertices,
-        stack.append(v)                                                     #desde el Destino, 
-        v = padre_aux[v]                                                        #hacia el Origen.
-
-    while stack:                                                            #Desapilamos, mientras
-        print( stack.pop() , end = "" )                                     #imprimimos el seguimiento.
-        if stack:
-            print(" -> ", end = "")
+    verticesOrdPorCentralidad = countingSort(vertices_apariciones, False)
+    
+    for i in range(cant):
+        print(verticesOrdPorCentralidad[i], end = "")
+        if i+1 < cant: 
+            print(", ", end = "")
             continue
         print()
 
+    return 
 
+def persecucion(grafo, verticesDeOrigen, k):
+    '''Imprime el Camino Minimo entre un Vertices de Origen y uno de los Vertices con mayor Centralidad'''
+    cant_recorridos = grafo.cantidad_vertices()*factorDelRecorrido
+    largo = grafo.cantidad_vertices()*factorDelRecorrido
+    vertices_apariciones = random_walks(grafo, largo, cant_recorridos)
+    verticesOrdPorCentralidad = countingSort(vertices_apariciones, False)
+            
+    distancia_aux = 0
+    destinoFinal = None
+    padresFinal = None
 
+    for origen in verticesDeOrigen:
+        distancias, padres = caminoMinimo(grafo, origen)
+        for destino in verticesOrdPorCentralidad:
+            if origen == destino: continue
+            if not destinoFinal == None:
+                if distancias[destino] > distancia_aux or (distancias[destino] == distancia_aux and 
+                    verticesOrdPorCentralidad.index(destino) > verticesOrdPorCentralidad.index(destinoFinal)):
+                    continue
+            distancia_aux = distancias[destino]
+            destinoFinal = destino
+            padresFinal = padres
 
+    imprimirSeguimiento(padresFinal, destinoFinal )
     return
 
+def comunidades(grafo, n):
+    '''Imprime un listado de Comunidades de al menos n integrantes'''
+    labels = {}
+    ady_para_cada_vertice = {}
+
+    labels, ady_para_cada_vertice = primer_visita(grafo, labels, ady_para_cada_vertice)
+
+    for _ in range(0, 50):
+
+        for v in grafo:
+            
+            labels[v] = max_freq(grafo, ady_para_cada_vertice[v], labels)
 
 
 
 
-
-    
-    
 
 g = Grafo()
 print(g)
