@@ -7,7 +7,7 @@ factorDelRecorrido = 10
 #-------------------------------------------------------------------#
 #                           AUXILIARES                              #
 #-------------------------------------------------------------------#
-def caminoMinimo(grafo, origen):
+def caminoMinimo(grafo, origen, distanciaMax = None):
     visitados = set()
     padre = {}
     distancia = {}
@@ -22,6 +22,8 @@ def caminoMinimo(grafo, origen):
         visitados.add(v)
         for w in grafo.adyacentes(v):
             if not w in visitados:
+                if distanciaMax and distancia[v] == distanciaMax:
+                    return distancia, padre
                 padre[w] = v
                 distancia[w] = distancia[v]+1
                 queue.append(w)
@@ -90,6 +92,17 @@ def imprimirSeguimiento(padres, destino):
         print( stack.pop() , end = "" )
         if stack:
             print(" -> ", end = "")
+            continue
+        print()
+    return
+
+def imprimirListado(lista, limite = None):
+    if not limite: limite = len(lista)
+    
+    for i in range(0, limite):
+        print(lista[i], end = "")
+        if i+1 < limite: 
+            print(", ", end = "")
             continue
         print()
     return
@@ -179,13 +192,7 @@ def mas_imp(grafo, cant):
     
     verticesOrdPorCentralidad = countingSort(vertices_apariciones, False)
     
-    for i in range(cant):
-        print(verticesOrdPorCentralidad[i], end = "")
-        if i+1 < cant: 
-            print(", ", end = "")
-            continue
-        print()
-
+    imprimirListado(verticesOrdPorCentralidad, cant)
     return 
 
 def persecucion(grafo, verticesDeOrigen, k):
@@ -215,28 +222,36 @@ def persecucion(grafo, verticesDeOrigen, k):
     return
 
 def comunidades(grafo, n):
+    '''Imprime un listado de comunidades de al menos n integrantes.'''
+    labels = {}
+    ady_para_cada_vertice = {}
+    dict_comunidades = {}
 
-	labels = {}
-	ady_para_cada_vertice = {}
-	dict_comunidades = {}
+    labels, ady_para_cada_vertice = asignar_labels(grafo, labels, ady_para_cada_vertice)
 
-	labels, ady_para_cada_vertice = asignar_labels(grafo, labels, ady_para_cada_vertice)
+    iteraciones = 50	#numero al azar para testear con los tiempos este se puede cambiar para bajar los tiempos
 
-	iteraciones = 50	#numero al azar para testear con los tiempos este se puede cambiar para bajar los tiempos
+    for i in range(0 , iteraciones):
 
-	for i in range(0 , iteraciones):
-
-		for v in grafo:
+        for v in grafo:
 		
-			labels[v] = max_freq(v, ady_para_cada_vertice[v], labels)
+            labels[v] = max_freq(v, ady_para_cada_vertice[v], labels)
 
-			if (i == iteraciones - 1):
-				integrantes = dict_comunidades.get(labels[v], set())
-				dict_comunidades[labels[v]] = integrantes.add(v)
+            if (i == iteraciones - 1):
+                integrantes = dict_comunidades.get(labels[v], set())
+                dict_comunidades[labels[v]] = integrantes.add(v)
 
-	impresion_de_comunidades(dict_comunidades, n)
+    impresion_de_comunidades(dict_comunidades, n)
 
-
+def divulgar(grafo, origen, n):
+    '''Imprime todos los Vertices a una distancia n o menor, al Vertice de Origen'''
+    distancias, _ = caminoMinimo(grafo,origen,n)
+    lista = []
+    for vertice in distancias.keys():
+        if vertice == origen: continue
+        lista.append(vertice)
+    imprimirListado(lista)
+    return
 
 
 
@@ -261,6 +276,11 @@ print("Agrego DF",g.agregar_arista('D','F'))
 print(g)
 
 mas_imp(g, 2)
+
+
+divulgar(g, 'A', 1)
+
+divulgar(g, 'A', 2)
 
 
 #print(g.vertice_random())
