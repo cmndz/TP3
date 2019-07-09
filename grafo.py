@@ -1,4 +1,4 @@
-import random
+from random import choice
 
 class Grafo:
 	'''Representación del TAD Grafo.'''
@@ -51,7 +51,7 @@ class Grafo:
 
 	def vertice_random(self):
 		'''Devuelve un vertice al azar del grafo.'''
-		return random.choice(list(self.grafo.keys()))
+		return choice(list(self.grafo.keys()))
 
 	def vertices(self):
 		'''Obtiene todos los vertices del grafo.'''
