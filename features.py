@@ -1,5 +1,5 @@
-import random
-from grafo import * 
+from random import choice
+from grafo import Grafo
 from collections import deque
 
 #-------------------------------------------------------------------#
@@ -45,7 +45,7 @@ def random_walks(grafo, largo, cant_recorridos):
             if not grafo.adyacentes(vertice_origen):
                 iteraciones_extra = largo - i
                 continue
-            vertice_origen = random.choice(list(grafo.adyacentes(vertice_origen)))	#Del vertice anterior se elije uno de sus adyacentes al azar
+            vertice_origen = choice(list(grafo.adyacentes(vertice_origen)))	#Del vertice anterior se elije uno de sus adyacentes al azar
             vertices_apariciones[vertice_origen] += 1
 
             if i == (largo + iteraciones_extra - 1):
@@ -348,7 +348,7 @@ def cfc(grafo):
     return cfcs
 
 
-
+'''
 g = Grafo()
 print(g)
 
@@ -378,5 +378,4 @@ lista = ['A','B']
 #persecucion(g,lista,1)
 print("Comunidades")
 comunidades(g, 2)
-
-
+'''
