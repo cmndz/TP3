@@ -273,23 +273,15 @@ g.agregar_arista('D','F')
 g.agregar_arista('D','F')
 print(g)
 
+print("Mas Imp!")
 mas_imp(g, 2)
+print("Divulgar")
 divulgar(g, 'A', 1)
 divulgar(g, 'A', 2)
+print("Persecucion")
 lista = ['A','B']
 persecucion(g,lista,1)
+print("Comunidades")
+comunidades(g, 2)
 
 
-#print(g.vertice_random())
-'''
-#print('Adyacentes de A',g.adyacentes('A'))
-min_seguimientos(g, 'A', 'F')
-print("Remuevo DF",g.borrar_arista('B','F'))
-print(g)
-min_seguimientos(g, 'A', 'F')
-print("Remuevo B", g.borrar_vertice('B'))
-min_seguimientos(g, 'A', 'F')
-#g.verticeRemover('A')
-#g.verticeRemover('B')
-#print(g.vertices())
-#print(g.)'''
