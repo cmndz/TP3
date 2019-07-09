@@ -257,16 +257,20 @@ def max_freq(grafo, labels, vertice):
     max_freq = 0
     comunidadFinal = labels[vertice]
 
+    #Recorremos todos los vertices del grafo, e inicializamos todas las labels a 0 frecuencias
     for v in grafo.vertices():
         if v == vertice: continue
         frecuencias[labels[v]] = 0
     
+    #Recorremos todos los vertices dele grafo, si v contiene a vertice como adyacente, sumamos uno al label de v
     for v in grafo.vertices():
         if vertice in grafo.adyacentes(v):
             frecuencias[labels[v]] += 1
     
+    #Recorremos todas las label de frecuencias, si superan la frecuencia de max_freq, actualizamos max_freq y el label de comunidadFinal 
     for comunidad in frecuencias.keys():
         if frecuencias[comunidad]>max_freq:
+            max_freq = frecuencias[comunidad]
             comunidadFinal = comunidad
     
     return comunidadFinal
@@ -275,17 +279,23 @@ def comunidades(grafo, n):
     labels = {}
     iteraciones = set()
     i = 0
-    
+    #Asignamos Labels--------------
     for v in grafo.vertices():
         labels[v]=i
         iteraciones.add(v)
         i += 1
     
     print(labels)
-
+    
+    #Iteramos aleatoriamente
     while iteraciones:
+        #Obtenemos un vertice aleatorio 
         vertice = random.choice(list(iteraciones))
+
+        #Lo eliminamos para ir vaciando Iteraciones
         iteraciones.remove(vertice)
+        
+        #El label de vertice es el label mas repetido de sus vertices de entrada
         labels[vertice]=max_freq(grafo, labels, vertice)
     
     print(labels)
