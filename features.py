@@ -116,6 +116,10 @@ def asignar_labels(grafo):
 		labels[v] = id_vertice
 		id_vertice += 1
 
+		if v not in ady_para_cada_vertice:
+			adys_de_v = set()
+			ady_para_cada_vertice[v] = adys_de_v
+
 		for w in grafo.adyacentes(v):
 
 			if w == v:
