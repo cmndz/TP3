@@ -346,36 +346,3 @@ def cfc(grafo):
             orden[vertice] = 0
             _cfc(grafo, vertice, visitados, orden, stack1, stack2, cfcs, en_cfcs)
     return cfcs
-
-
-'''
-g = Grafo()
-print(g)
-
-g.agregar_vertice('A')
-g.agregar_vertice('B')
-g.agregar_vertice('C')
-g.agregar_vertice('D')
-g.agregar_vertice('E')
-g.agregar_vertice('F')
-g.agregar_arista('A','B')
-g.agregar_arista('B','C')
-g.agregar_arista('C','D')
-g.agregar_arista('A','E')
-g.agregar_arista('B','F')
-g.agregar_arista('D','F')
-g.agregar_arista('D','F')
-g.agregar_arista('D','F')
-print(g)
-
-print("Mas Imp!")
-mas_imp(g, 2)
-print("Divulgar")
-divulgar(g, 'A', 1)
-divulgar(g, 'A', 2)
-print("Persecucion")
-lista = ['A','B']
-#persecucion(g,lista,1)
-print("Comunidades")
-comunidades(g, 2)
-'''
