@@ -193,14 +193,17 @@ def encontrar_ciclo(grafo, vertice_orig, vertice_act, pasos):
 		return None
 
 	if (pasos == 0 and vertice_act == vertice_orig):
-		return set(vertice_orig)
+		vertices_en_ciclo = set()
+		vertices_en_ciclo.add(vertice_orig)
+		return vertices_en_ciclo
 
 	for w in grafo.adyacentes(vertice_act):
 
 		vertices_en_ciclo = encontrar_ciclo(grafo, vertice_orig, w, pasos - 1)
 
 		if vertices_en_ciclo:
-			return vertices_en_ciclo.add(w)
+			vertices_en_ciclo.add(w)
+			return vertices_en_ciclo
 
 	return None
 
