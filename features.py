@@ -120,7 +120,7 @@ def asignar_labels(grafo, labels, ady_para_cada_vertice):
 
 	return labels, ady_para_cada_vertice
 
-
+'''
 def max_freq(vertice, adyacentes, labels):
 
 	if not adyacentes:
@@ -140,7 +140,7 @@ def max_freq(vertice, adyacentes, labels):
 			label_actual = numero_id
 
 	return label_actual
-
+'''
 
 def impresion_de_comunidades(dict_comunidades, n):
 
@@ -251,8 +251,54 @@ def persecucion(grafo, verticesDeOrigen, k):
     imprimirSeguimiento(padresFinal, destinoFinal )
     return
 
+#TEST-------------------------------------------------------------------------------
+def max_freq(grafo, labels, vertice):
+    frecuencias = {}
+    max_freq = 0
+    comunidadFinal = labels[vertice]
+
+    for v in grafo.vertices():
+        if v == vertice: continue
+        frecuencias[labels[v]] = 0
+    
+    for v in grafo.vertices():
+        if vertice in grafo.adyacentes(v):
+            frecuencias[labels[v]] += 1
+    
+    for comunidad in frecuencias.keys():
+        if frecuencias[comunidad]>max_freq:
+            comunidadFinal = comunidad
+    
+    return comunidadFinal
+
 def comunidades(grafo, n):
-    '''Imprime un listado de comunidades de al menos n integrantes.'''
+    labels = {}
+    iteraciones = set()
+    i = 0
+    
+    for v in grafo.vertices():
+        labels[v]=i
+        iteraciones.add(v)
+        i += 1
+    
+    print(labels)
+
+    while iteraciones:
+        vertice = random.choice(list(iteraciones))
+        iteraciones.remove(vertice)
+        labels[vertice]=max_freq(grafo, labels, vertice)
+    
+    print(labels)
+
+    return
+#TEST-------------------------------------------------------------------------------
+
+
+
+
+'''
+def comunidades(grafo, n):
+    #Imprime un listado de comunidades de al menos n integrantes.
     labels = {}
     ady_para_cada_vertice = {}
     dict_comunidades = {}
@@ -272,7 +318,7 @@ def comunidades(grafo, n):
                 dict_comunidades[labels[v]] = integrantes.add(v)
 
     impresion_de_comunidades(dict_comunidades, n)
-
+'''
 def divulgar(grafo, origen, n):
     '''Imprime todos los Vertices a una distancia n o menor, al Vertice de Origen'''
     distancias, _ = caminoMinimo(grafo,origen,n)
@@ -321,7 +367,7 @@ divulgar(g, 'A', 1)
 divulgar(g, 'A', 2)
 print("Persecucion")
 lista = ['A','B']
-persecucion(g,lista,1)
+#persecucion(g,lista,1)
 print("Comunidades")
 comunidades(g, 2)
 
