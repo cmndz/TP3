@@ -212,6 +212,28 @@ def encontrar_ciclo(grafo, vertice_orig, vertice_act, pasos):
 
 	return None
 
+def _cfc(grafo, verticeOrigen, visitados, orden, stack1, stack2, cfcs, en_cfcs):
+    visitados.add(verticeOrigen)
+    stack1.append(verticeOrigen)
+    stack2.append(verticeOrigen)
+    for verticeAdy in grafo.adyacentes(verticeOrigen):
+        if verticeAdy not in visitados:
+            orden[verticeAdy] = orden[verticeOrigen]+1
+            _cfc(grafo, verticeAdy, visitados, orden, stack1, stack2, cfcs, en_cfcs)
+        elif verticeAdy not in en_cfcs:
+            while orden[stack1[-1]] > orden[verticeAdy]:
+                stack1.pop()
+
+    if stack1[-1] == verticeOrigen:
+        stack1.pop()
+        verticeAux = None
+        nueva_cfc = []
+        while not verticeAux == verticeOrigen:
+            verticeAux = stack2.pop()
+            en_cfcs.add(verticeAux)
+            nueva_cfc.append(verticeAux)
+        cfcs.appen(nueva_cfc)
+
 #-------------------------------------------------------------------#
 #                         FUNCIONALIDADES                           #
 #-------------------------------------------------------------------#
@@ -269,25 +291,25 @@ def persecucion(grafo, verticesDeOrigen, k):
 
 
 def comunidades(grafo, n):
+    '''Imprime un listado de comunidades de al menos n integrantes.'''
+    labels, ady_para_cada_vertice = asignar_labels(grafo)
 
-	labels, ady_para_cada_vertice = asignar_labels(grafo)
+    dict_comunidades = {}
 
-	dict_comunidades = {}
+    iteraciones = 50	#numero al azar para testear con los tiempos este se puede cambiar para bajar los tiempos
 
-	iteraciones = 50	#numero al azar para testear con los tiempos este se puede cambiar para bajar los tiempos
+    for i in range(0 , iteraciones):
 
-	for i in range(0 , iteraciones):
-
-		for v in grafo:
+        for v in grafo:
 		
-			labels[v] = max_freq(v, ady_para_cada_vertice[v], labels)
+            labels[v] = max_freq(v, ady_para_cada_vertice[v], labels)
 
-			if (i == iteraciones - 1):
-				integrantes = dict_comunidades.get(labels[v], set())
-				integrantes.add(v)
-				dict_comunidades[labels[v]] = integrantes
+            if (i == iteraciones - 1):
+                integrantes = dict_comunidades.get(labels[v], set())
+                integrantes.add(v)
+                dict_comunidades[labels[v]] = integrantes
 
-	impresion_de_comunidades(dict_comunidades, n)
+    impresion_de_comunidades(dict_comunidades, n)
 
 
 def divulgar(grafo, origen, n):
@@ -310,6 +332,21 @@ def divulgar_ciclo(grafo, origen, n):
 		imprimir_ciclo(vertices_en_ciclo, n + 1)
 	else:
 		print("No se encontro recorrido")
+
+def cfc(grafo):
+    '''Imprime cada conjunto de Vertices entre los cuales, todos estan conectados con todos.'''
+    visitados = set()
+    en_cfcs = set()
+    orden = {}
+    stack1 = []
+    stack2 = []
+    cfcs = []
+    for vertice in grafo:
+        if vertice not in visitados:
+            orden[vertice] = 0
+            _cfc(grafo, vertice, visitados, orden, stack1, stack2, cfcs, en_cfcs)
+    return cfcs
+
 
 
 g = Grafo()
