@@ -105,10 +105,16 @@ def imprimirListado(lista, limite = None):
         print()
     return
 
-def asignar_labels(grafo, labels, ady_para_cada_vertice):
+def asignar_labels(grafo):
+
+	labels = {}
+	ady_para_cada_vertice = {}
+	id_vertice = 1
 
 	for v in grafo:
-		labels[v] = random.randint(1, 1000)
+
+		labels[v] = id_vertice
+		id_vertice += 1
 
 		for w in grafo.adyacentes(v):
 
@@ -116,14 +122,15 @@ def asignar_labels(grafo, labels, ady_para_cada_vertice):
 				continue
 
 			set_actual_de_adys = ady_para_cada_vertice.get(w, set())
-			ady_para_cada_vertice[w] = set_actual_de_adys.add(v)
+			set_actual_de_adys.add(v)
+			ady_para_cada_vertice[w] = set_actual_de_adys
 
 	return labels, ady_para_cada_vertice
 
 '''
 def max_freq(vertice, adyacentes, labels):
 
-	if not adyacentes:
+	if len(adyacentes) == 0:
 		return labels[vertice]
 
 	frecuencias = {}
@@ -140,6 +147,7 @@ def max_freq(vertice, adyacentes, labels):
 			label_actual = numero_id
 
 	return label_actual
+
 '''
 
 def impresion_de_comunidades(dict_comunidades, n):
@@ -308,26 +316,25 @@ def comunidades(grafo, n):
 
 '''
 def comunidades(grafo, n):
-    #Imprime un listado de comunidades de al menos n integrantes.
-    labels = {}
-    ady_para_cada_vertice = {}
-    dict_comunidades = {}
 
-    labels, ady_para_cada_vertice = asignar_labels(grafo, labels, ady_para_cada_vertice)
+	labels, ady_para_cada_vertice = asignar_labels(grafo)
 
-    iteraciones = 50	#numero al azar para testear con los tiempos este se puede cambiar para bajar los tiempos
+	dict_comunidades = {}
 
-    for i in range(0 , iteraciones):
+	iteraciones = 50	#numero al azar para testear con los tiempos este se puede cambiar para bajar los tiempos
 
-        for v in grafo:
+	for i in range(0 , iteraciones):
+
+		for v in grafo:
 		
-            labels[v] = max_freq(v, ady_para_cada_vertice[v], labels)
+			labels[v] = max_freq(v, ady_para_cada_vertice[v], labels)
 
-            if (i == iteraciones - 1):
-                integrantes = dict_comunidades.get(labels[v], set())
-                dict_comunidades[labels[v]] = integrantes.add(v)
+			if (i == iteraciones - 1):
+				integrantes = dict_comunidades.get(labels[v], set())
+				integrantes.add(v)
+				dict_comunidades[labels[v]] = integrantes
 
-    impresion_de_comunidades(dict_comunidades, n)
+	impresion_de_comunidades(dict_comunidades, n)
 '''
 def divulgar(grafo, origen, n):
     '''Imprime todos los Vertices a una distancia n o menor, al Vertice de Origen'''
