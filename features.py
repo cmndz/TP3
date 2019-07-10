@@ -1,6 +1,7 @@
 from random import choice
 from grafo import Grafo
 from collections import deque
+from pila import Pila
 
 #-------------------------------------------------------------------#
 #                           AUXILIARES                              #
