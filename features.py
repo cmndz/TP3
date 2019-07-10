@@ -331,6 +331,10 @@ def divulgar(grafo, origen, n):
 
 def divulgar_ciclo(grafo, origen, n):
 
+    if not origen in grafo.vertices():
+        print("No se encontro recorrido")
+        return
+
     vertices_en_ciclo = encontrar_ciclo(grafo, origen, origen, n)
 
     if vertices_en_ciclo != None:
