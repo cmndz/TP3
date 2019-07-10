@@ -151,15 +151,13 @@ def impresion_de_comunidades(dict_comunidades, n):
 
 def imprimir_ciclo(vertices_en_ciclo, impresiones):
 
-	impresion = 1
+	while not vertices_en_ciclo.esta_vacia():
+		print(vertices_en_ciclo.desapilar(), end = "")
 
-	for v in vertices_en_ciclo:
-		print(v)
+		if not vertices_en_ciclo.esta_vacia():
+			print(" -> ", end = "")
 
-		if impresion != impresiones:
-			print(" -> ")
-
-		impresion += 1
+	print()
 
 def encontrar_ciclo(grafo, vertice_orig, vertice_act, pasos):
 
@@ -167,16 +165,15 @@ def encontrar_ciclo(grafo, vertice_orig, vertice_act, pasos):
 		return None
 
 	if (pasos == 0 and vertice_act == vertice_orig):
-		vertices_en_ciclo = set()
-		vertices_en_ciclo.add(vertice_orig)
+		vertices_en_ciclo = Pila()
 		return vertices_en_ciclo
 
 	for w in grafo.adyacentes(vertice_act):
 
 		vertices_en_ciclo = encontrar_ciclo(grafo, vertice_orig, w, pasos - 1)
 
-		if vertices_en_ciclo:
-			vertices_en_ciclo.add(w)
+		if vertices_en_ciclo != None:
+			vertices_en_ciclo.apilar(w)
 			return vertices_en_ciclo
 
 	return None
@@ -333,8 +330,8 @@ def divulgar_ciclo(grafo, origen, n):
 
 	vertices_en_ciclo = encontrar_ciclo(grafo, origen, origen, n)
 
-	if vertices_en_ciclo:
-		vertices_en_ciclo.add(origen)
+	if vertices_en_ciclo != None:
+		vertices_en_ciclo.apilar(origen)
 		imprimir_ciclo(vertices_en_ciclo, n + 1)
 	else:
 		print("No se encontro recorrido")
