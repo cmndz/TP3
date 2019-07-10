@@ -60,5 +60,3 @@ def main():
         print("Insertar instruccion!")
         interpretarComando(grafo, stdin.readline())
     return
-    
-main()
