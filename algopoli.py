@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from features import *
+from features import * 
 from grafo import Grafo
 from argparse import ArgumentParser
 from sys import *
@@ -27,20 +27,22 @@ def interpretarComando(grafo, line):
     comando = None
     parametros = None
 
-    if ' ' in line:
-        comando, parametrosAux = line.rstrip('\n').split(' ')
-        parametros = parametrosAux.split(',')
-    else:
-        comando = line.rstrip('\n')
-    
-    comando = comandos[comando]
+    listLine = line.rstrip('\n').split(' ') 
+
+    if len(listLine)>1:
+        parametros = listLine[1:]
+        if ',' in parametros[0]:
+            temp = parametros[0].split(',')
+            parametros[0] = temp
+
+    comando = comandos[listLine[0]]
 
     if comando == 1: min_seguimientos(grafo, parametros[0], parametros[1])
-    elif comando == 2: mas_imp(grafo, parametros[0] )
-    elif comando == 3: persecucion(grafo, parametros[0], parametros[1])
-    elif comando == 4: comunidades(grafo, parametros[0])
-    elif comando == 5: divulgar(grafo, parametros[0], parametros[1])
-    elif comando == 6: divulgar_ciclo(grafo, parametros[0], parametros[1])
+    elif comando == 2: mas_imp(grafo, int(parametros[0]))
+    elif comando == 3: persecucion(grafo, parametros[0], int(parametros[1]))
+    elif comando == 4: comunidades(grafo, int(parametros[0]))
+    elif comando == 5: divulgar(grafo, parametros[0], int(parametros[1]))
+    elif comando == 6: divulgar_ciclo(grafo, parametros[0], int(parametros[1]))
     else: cfc(grafo)
     
     return 
@@ -58,7 +60,5 @@ def main():
         print("Insertar instruccion!")
         interpretarComando(grafo, stdin.readline())
     return
-
-
-
+    
 main()
