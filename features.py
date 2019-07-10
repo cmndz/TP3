@@ -232,7 +232,7 @@ def _cfc(grafo, verticeOrigen, visitados, orden, stack1, stack2, cfcs, en_cfcs):
             verticeAux = stack2.pop()
             en_cfcs.add(verticeAux)
             nueva_cfc.append(verticeAux)
-        cfcs.appen(nueva_cfc)
+        cfcs.append(nueva_cfc)
 
 #-------------------------------------------------------------------#
 #                         FUNCIONALIDADES                           #
