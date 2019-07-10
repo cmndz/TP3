@@ -33,19 +33,19 @@ def random_walks(grafo, largo, cant_recorridos):
     for v in grafo: 
         vertices_apariciones[v] = 0
     
-    for _ in range (0, cant_recorridos):	#Para una cantidad de recorridos
+    for _ in range (0, cant_recorridos):	                                    #Para una cantidad de recorridos
         
         vertice_origen = grafo.vertice_random()
         vertices_apariciones[vertice_origen] += 1
 
         iteraciones_extra = 0
 
-        for i in range (0, largo + iteraciones_extra):	#Para una cantidad "largo" de veces
+        for i in range (0, largo + iteraciones_extra):	                        #Para una cantidad "largo" de veces
             
             if not grafo.adyacentes(vertice_origen):
                 iteraciones_extra = largo - i
                 continue
-            vertice_origen = choice(list(grafo.adyacentes(vertice_origen)))	#Del vertice anterior se elije uno de sus adyacentes al azar
+            vertice_origen = choice(list(grafo.adyacentes(vertice_origen)))	    #Del vertice anterior se elije uno de sus adyacentes al azar
             vertices_apariciones[vertice_origen] += 1
 
             if i == (largo + iteraciones_extra - 1):
@@ -59,15 +59,15 @@ def countingSort(hash, MenorAMayor = True):
     rango = (maximo - minimo)+1
     #Calculo de Ocurrencias-----------------------------------------
     ocurrencias = []
-    for i in range(rango):ocurrencias.insert(i,0)
+    for i in range(rango): ocurrencias.insert(i,0)
     for i in hash.values(): ocurrencias[i-minimo] += 1
     #Sumas Parciales------------------------------------------------
     sumasParciales = []
-    for i in range(rango+1):sumasParciales.insert(i,0)
+    for i in range(rango+1): sumasParciales.insert(i,0)
     for i in range(rango): sumasParciales[i+1] = sumasParciales[i]+ocurrencias[i]
     #Solucion-------------------------------------------------------
     solucion = []
-    for i in range(len(hash)):solucion.insert(i,None)
+    for i in range(len(hash)): solucion.insert(i,None)
     for v in hash.keys():
         posicion = None
         if MenorAMayor: 
@@ -77,33 +77,6 @@ def countingSort(hash, MenorAMayor = True):
         solucion[posicion] = v
         sumasParciales[hash[v]-minimo]+=1
     return solucion
-
-def imprimirSeguimiento(padres, destino):
-    stack = []
-    vertice = destino
-    #---------------------------------------------------------------
-    while vertice:
-        stack.append(vertice) 
-        vertice = padres[vertice]
-    #---------------------------------------------------------------
-    while stack:
-        print( stack.pop() , end = "" )
-        if stack:
-            print(" -> ", end = "")
-            continue
-        print()
-    return
-
-def imprimirListado(lista, limite = None):
-    if not limite: limite = len(lista)
-    #---------------------------------------------------------------
-    for i in range(0, limite):
-        print(lista[i], end = "")
-        if i+1 < limite: 
-            print(", ", end = "")
-            continue
-        print()
-    return
 
 def asignar_labels(grafo):
 
@@ -131,7 +104,6 @@ def asignar_labels(grafo):
 
 	return labels, ady_para_cada_vertice
 
-
 def max_freq(vertice, adyacentes, labels):
 
 	if len(adyacentes) == 0:
@@ -151,7 +123,6 @@ def max_freq(vertice, adyacentes, labels):
 			label_actual = numero_id
 
 	return label_actual
-
 
 def impresion_de_comunidades(dict_comunidades, n):
 
@@ -178,7 +149,6 @@ def impresion_de_comunidades(dict_comunidades, n):
 
             print()
 
-
 def imprimir_ciclo(vertices_en_ciclo, impresiones):
 
 	impresion = 1
@@ -190,7 +160,6 @@ def imprimir_ciclo(vertices_en_ciclo, impresiones):
 			print(" -> ")
 
 		impresion += 1
-
 
 def encontrar_ciclo(grafo, vertice_orig, vertice_act, pasos):
 
@@ -234,11 +203,49 @@ def _cfc(grafo, verticeOrigen, visitados, orden, stack1, stack2, cfcs, en_cfcs):
             nueva_cfc.append(verticeAux)
         cfcs.append(nueva_cfc)
 
+def imprimirSeguimiento(padres, destino):
+    stack = []
+    vertice = destino
+    while vertice:
+        stack.append(vertice) 
+        vertice = padres[vertice]
+    while stack:
+        print(stack.pop(), end = '')
+        if stack:
+            print(' -> ', end = '')
+            continue
+        print()
+    return
+
+def imprimirListado(lista, limite = None):
+    if not limite: limite = len(lista)
+    for i in range(0, limite):
+        print(lista[i], end = '')
+        if i+1 < limite: 
+            print(', ', end = '')
+            continue
+        print()
+    return
+
+def imprimirPorLotes(lista, tipoLote):
+    for i in range(len(lista)):
+        print(tipoLote+' ',i,': ', sep='', end= '')
+        conjunto = lista[i]
+        for j in range(len(conjunto)):
+            print(conjunto[j], end= '')
+            if j+1 < len(conjunto):
+                print(end= ', ')
+        print()
+    return
+
 #-------------------------------------------------------------------#
 #                         FUNCIONALIDADES                           #
 #-------------------------------------------------------------------#
 def min_seguimientos(grafo, origen, destino):
-    '''Imprime el Camino Minimo entre un Vertice de Origen y uno de Destino, si es que fueran conexos.'''
+    '''
+    Imprime el Camino Minimo entre un Vertice de Origen y uno de 
+    Destino, si es que fueran conexos.
+    '''
     if not origen in grafo.vertices() or destino not in grafo.vertices():
         print("Seguimiento Imposible")
         return
@@ -246,19 +253,20 @@ def min_seguimientos(grafo, origen, destino):
     if destino not in padres.keys():
         print("Seguimiento Imposible")
         return
-
+    
     imprimirSeguimiento(padres, destino)
     return
 
 def mas_imp(grafo, cant):
-    '''Imprime los Vertices de mayor a menor centralidad dentro del grafo'''
+    '''
+    Imprime, de mayor a menor Centralidad, los k Vertices con mas 
+    Centralidad dentro del grafo.
+    '''
     cant_recorridos = grafo.cantidad_vertices()
     largo = grafo.cantidad_vertices()
-
     vertices_apariciones = random_walks(grafo, largo, cant_recorridos)
-    
     verticesOrdPorCentralidad = countingSort(vertices_apariciones, False)
-    
+
     imprimirListado(verticesOrdPorCentralidad, cant)
     return 
 
@@ -288,7 +296,6 @@ def persecucion(grafo, verticesDeOrigen, k):
 
     imprimirSeguimiento(padresFinal, destinoFinal )
     return
-
 
 def comunidades(grafo, n):
     '''Imprime un listado de comunidades de al menos n integrantes.'''
@@ -322,7 +329,6 @@ def divulgar(grafo, origen, n):
     imprimirListado(lista)
     return
 
-
 def divulgar_ciclo(grafo, origen, n):
 
 	vertices_en_ciclo = encontrar_ciclo(grafo, origen, origen, n)
@@ -345,4 +351,5 @@ def cfc(grafo):
         if vertice not in visitados:
             orden[vertice] = 0
             _cfc(grafo, vertice, visitados, orden, stack1, stack2, cfcs, en_cfcs)
-    return cfcs
+    imprimirPorLotes(cfcs,'CFC')
+    return
