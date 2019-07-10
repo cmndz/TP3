@@ -1,7 +1,6 @@
 from random import choice
 from grafo import Grafo
 from collections import deque
-from pila import Pila
 
 #-------------------------------------------------------------------#
 #                           AUXILIARES                              #
@@ -152,32 +151,32 @@ def impresion_de_comunidades(dict_comunidades, n):
 
 def imprimir_ciclo(vertices_en_ciclo, impresiones):
 
-	while not vertices_en_ciclo.esta_vacia():
-		print(vertices_en_ciclo.desapilar(), end = "")
+    while vertices_en_ciclo:
+        print(vertices_en_ciclo.pop(), end = "")
 
-		if not vertices_en_ciclo.esta_vacia():
-			print(" -> ", end = "")
+        if vertices_en_ciclo != []:
+            print(" -> ", end = "")
 
-	print()
+    print()
 
 def encontrar_ciclo(grafo, vertice_orig, vertice_act, pasos):
 
-	if (pasos == 0 and vertice_act != vertice_orig):
-		return None
+    if (pasos == 0 and vertice_act != vertice_orig):
+        return None
 
-	if (pasos == 0 and vertice_act == vertice_orig):
-		vertices_en_ciclo = Pila()
-		return vertices_en_ciclo
+    if (pasos == 0 and vertice_act == vertice_orig):
+        vertices_en_ciclo = []
+        return vertices_en_ciclo
 
-	for w in grafo.adyacentes(vertice_act):
+    for w in grafo.adyacentes(vertice_act):
 
-		vertices_en_ciclo = encontrar_ciclo(grafo, vertice_orig, w, pasos - 1)
+        vertices_en_ciclo = encontrar_ciclo(grafo, vertice_orig, w, pasos - 1)
 
-		if vertices_en_ciclo != None:
-			vertices_en_ciclo.apilar(w)
-			return vertices_en_ciclo
+        if vertices_en_ciclo != None:
+            vertices_en_ciclo.append(w)
+            return vertices_en_ciclo
 
-	return None
+    return None
 
 def _cfc(grafo, verticeOrigen, visitados, orden, stack1, stack2, cfcs, en_cfcs):
     visitados.add(verticeOrigen)
@@ -329,13 +328,13 @@ def divulgar(grafo, origen, n):
 
 def divulgar_ciclo(grafo, origen, n):
 
-	vertices_en_ciclo = encontrar_ciclo(grafo, origen, origen, n)
+    vertices_en_ciclo = encontrar_ciclo(grafo, origen, origen, n)
 
-	if vertices_en_ciclo != None:
-		vertices_en_ciclo.apilar(origen)
-		imprimir_ciclo(vertices_en_ciclo, n + 1)
-	else:
-		print("No se encontro recorrido")
+    if vertices_en_ciclo != None:
+        vertices_en_ciclo.append(origen)
+        imprimir_ciclo(vertices_en_ciclo, n + 1)
+    else:
+        print("No se encontro recorrido")
 
 def cfc(grafo):
     '''Imprime cada conjunto de Vertices entre los cuales, todos estan conectados con todos.'''
