@@ -226,7 +226,7 @@ def imprimirListado(lista, limite = None):
 
 def imprimirPorLotes(lista, tipoLote):
     for i in range(len(lista)):
-        print(tipoLote+' ',i,': ', sep='', end= '')
+        print(tipoLote+' ',i+1,': ', sep='', end= '')
         conjunto = lista[i]
         for j in range(len(conjunto)):
             print(conjunto[j], end= '')
