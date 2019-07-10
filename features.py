@@ -11,17 +11,20 @@ def caminoMinimo(grafo, origen, distanciaMax = None):
     distancia = {}
     queue = deque()
     #---------------------------------------------------------------
+    visitados.add(origen)
     padre[origen] = None
     distancia[origen] = 0
     queue.append(origen)
     #---------------------------------------------------------------
     while queue:
         v = queue.popleft()
-        visitados.add(v)
+        #print("Vertice padre: {}".format(v))
         for w in grafo.adyacentes(v):
             if not w in visitados:
                 if distanciaMax and distancia[v] == distanciaMax:
                     return distancia, padre
+                #print("Vertice hijo: {} con padre: {}".format(w,v))
+                visitados.add(w)
                 padre[w] = v
                 distancia[w] = distancia[v]+1
                 queue.append(w)
