@@ -247,11 +247,11 @@ def min_seguimientos(grafo, origen, destino):
     Destino, si es que fueran conexos.
     '''
     if not origen in grafo.vertices() or destino not in grafo.vertices():
-        print("Seguimiento Imposible")
+        print("Seguimiento imposible")
         return
     _, padres = caminoMinimo(grafo, origen)
     if destino not in padres.keys():
-        print("Seguimiento Imposible")
+        print("Seguimiento imposible")
         return
     
     imprimirSeguimiento(padres, destino)
