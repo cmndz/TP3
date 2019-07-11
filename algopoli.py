@@ -3,7 +3,7 @@ from features import (min_seguimientos, mas_imp,
 persecucion, comunidades, divulgar, divulgar_ciclo, cfc)
 from grafo import Grafo
 from argparse import ArgumentParser
-from sys import stdin
+from sys import *
 
 def generarGrafo(path):
     '''
