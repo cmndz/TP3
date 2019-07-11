@@ -66,3 +66,5 @@ def main():
     grafo = generarGrafo(args.grafoPath)
     while True: interpretarComando(grafo, stdin.readline())
     return
+
+main()
