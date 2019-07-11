@@ -57,5 +57,6 @@ def main():
     #print(grafo)
     
     while True:
+        #print("Insertar instruccion!")
         interpretarComando(grafo, stdin.readline())
     return
