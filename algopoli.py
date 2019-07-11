@@ -64,7 +64,8 @@ def main():
     parser.add_argument( 'grafoPath' , help='Directorio del archivo Generador del Grafo.' )
     args = parser.parse_args()
     grafo = generarGrafo(args.grafoPath)
-    while True: interpretarComando(grafo, stdin.readline())
+    for line in stdin:
+        interpretarComando(grafo, line)
     return
 
 main()
