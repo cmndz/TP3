@@ -1,10 +1,15 @@
 #!/usr/bin/python3
-from features import * 
+from features import (min_seguimientos, mas_imp,
+persecucion, comunidades, divulgar, divulgar_ciclo, cfc)
 from grafo import Grafo
 from argparse import ArgumentParser
-from sys import *
+from sys import stdin
 
 def generarGrafo(path):
+    '''
+    Genera un Grafo mediante un archivo .tsv 
+    indicado en el parametro path.
+    '''
     grafo = Grafo()
     with open(path, mode = 'r' ) as file:
         for line in file:
@@ -15,6 +20,10 @@ def generarGrafo(path):
     return grafo
 
 def interpretarComando(grafo, line):
+    '''
+    Intepreta la linea recibida, y ejecuta 
+    el comando correspondiente sobre el grafo.
+    '''
     comandos = { 
         'min_seguimientos':1
         , 'mas_imp':2
@@ -44,19 +53,16 @@ def interpretarComando(grafo, line):
     elif comando == 5: divulgar(grafo, parametros[0], int(parametros[1]))
     elif comando == 6: divulgar_ciclo(grafo, parametros[0], int(parametros[1]))
     else: cfc(grafo)
-    
+
     return 
 
 def main():
     '''
+    Funcion Principal.
     '''
     parser = ArgumentParser( description='Argumentos de AlgoPoli' )
     parser.add_argument( 'grafoPath' , help='Directorio del archivo Generador del Grafo.' )
     args = parser.parse_args()
     grafo = generarGrafo(args.grafoPath)
-    #print(grafo)
-    
-    while True:
-        #print("Insertar instruccion!")
-        interpretarComando(grafo, stdin.readline())
+    while True: interpretarComando(grafo, stdin.readline())
     return
