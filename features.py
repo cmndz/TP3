@@ -162,30 +162,34 @@ def imprimir_ciclo(vertices_en_ciclo, impresiones):
 
     print()
 
-def encontrar_ciclo(grafo, vertice_orig, vertice_act, pasos):
+def encontrar_ciclo(grafo, vertice_orig, vertice_act, pasos, vertices_usados):
 
     if (pasos == 0 and vertice_act != vertice_orig):
-        return None, None
+        return None
 
     if (pasos == 0 and vertice_act == vertice_orig):
         vertices_en_ciclo = []
-        vertices_enlistados = set()
-        return vertices_en_ciclo, vertices_enlistados
+        return vertices_en_ciclo
+
+    vertices_usados.add(vertice_act)
 
     for w in grafo.adyacentes(vertice_act):
 
-        vertices_en_ciclo, vertices_enlistados = encontrar_ciclo(grafo, vertice_orig, w, pasos - 1)
+        if (w != vertice_orig and w in vertices_usados):
+            continue
+
+        if (w == vertice_orig and pasos != 1):
+            continue
+
+        vertices_en_ciclo = encontrar_ciclo(grafo, vertice_orig, w, pasos - 1, vertices_usados)
 
         if vertices_en_ciclo != None:
 
-            if w in vertices_enlistados:
-                return None, None
-
             vertices_en_ciclo.append(w)
-            vertices_enlistados.add(w)
-            return vertices_en_ciclo, vertices_enlistados
+            return vertices_en_ciclo
 
-    return None, None
+    vertices_usados.remove(vertice_act)
+    return None
 
 def _cfc(grafo, verticeOrigen, visitados, orden, stack1, stack2, cfcs, en_cfcs):
     visitados.add(verticeOrigen)
@@ -341,7 +345,9 @@ def divulgar_ciclo(grafo, origen, n):
         print("No se encontro recorrido")
         return
 
-    vertices_en_ciclo, vertices_enlistados = encontrar_ciclo(grafo, origen, origen, n)
+    vertices_usados = set()
+
+    vertices_en_ciclo = encontrar_ciclo(grafo, origen, origen, n, vertices_usados)
 
     if vertices_en_ciclo != None:
         vertices_en_ciclo.append(origen)
